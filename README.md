@@ -1,23 +1,111 @@
-# Data Challenge 2023
+# Optimizing Enedis Operational Base Locations in Brittany (Rennes Data Challenge 2023)
 
-The Master in Applied Mathematics and Statistics (Universities of Rennes 1 and Rennes 2), the Master in Money, Banking, Finance and Insurance (University of Rennes 1), TAC ECONOMICS and the Rennes Data Science association are organizing a data challenge on January 20th and 21st, 2023 at the Faculty of Economics in Rennes.
+------------------
 
-
-
-##  Many thanks to our 2023 sponsors
-
-<a href="https://www.enedis.fr" target="_blank"><img src="https://upload.wikimedia.org/wikipedia/fr/archive/7/77/20220206174115%21Logo_enedis_header.png" width="200"></a> &nbsp;&nbsp; 
-<a href="https://www.groupama.fr/" target="_blank"><img src="https://storage.googleapis.com/endurance-apps-liip/media/cache/groupama_no_filter_grid_fs/62432ca1728ee72abb6d0f72" width="200"></a> &nbsp;&nbsp; 
-<a href="https://fondation.univ-rennes.fr/" target="_blank"><img src="https://fondation.univ-rennes.fr/sites/fondation.univ-rennes.fr/files/paragraphs/images/Logo%20fondation%20noir.png" width="200"></a>
+<br>
 
 
+*Enedis is a company that operates and maintains most of the electricity distribution network in France*
+- *it does not produce electricity and does not sell it*
+- *it focuses only on distribution and reliability of the electrical grid*
 
-## And to the organizers and partners
-
-<a href="https://eco.univ-rennes.fr/amsr" target="_blank"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRJFVhC8qDxZYA4gqlpyxEslSoS7IZSw3N8wA&s" width="200"></a> &nbsp;&nbsp; 
-<a href="https://eco.univ-rennes.fr/aerief" target="_blank"><img src="https://etudiant.univ-rennes.fr/sites/etudiant.univ-rennes.fr/files/resources/1Capture.png" width="200"></a> &nbsp;&nbsp; 
-<a href="https://www.univ-rennes.fr/" target="_blank"><img src="https://www.twinsys.io/images/testimonials/univ-rennes.png" width="200"></a> &nbsp;&nbsp; 
-<a href="https://taceconomics.com" target="_blank"><img src="https://taceconomics.com/wp-content/uploads/2024/01/Full-Wordmark.png" width="100"></a>
+<a href="https://www.enedis.fr" target="_blank"><img src="https://upload.wikimedia.org/wikipedia/fr/archive/7/77/20220206174115%21Logo_enedis_header.png" width="400"></a> &nbsp;&nbsp; 
 
 
+<br>
 
+
+### Presentation
+
+-------------
+
+
+The project focuses on optimizing the location of operational bases (OB) for Enedis in the Brittany region.  
+
+The goal is to reduce technician response times by better placing operational bases and assigning communes to them efficiently. This will:
+- reduce power outage duration
+- improve service quality for customers
+- increase team efficiency
+
+
+
+<br>
+
+
+
+### Objective
+
+--------------
+
+
+We will optimize location of operational bases and assign each commune to a base in order to reduce intervention times:
+1. each commune must be assigned to exactly 1 operational base
+2. travel time between commune and base should not exceed 30 minutes
+3. communes have different weights based on intervention activity levels
+
+
+
+
+
+<br>
+
+
+### Approach
+
+We compare several clustering strategies to model how operational bases should be placed across Brittany:
+- partitioning communes into $k$ groups
+- minimizing within-cluster spatial dispersion and improving operational relevance
+
+
+
+|   Approach    |   Model  | Objective Function Minimized  |
+|-----|-----------|------|
+|  **Baseline geographic clustering**   |    Reference model using only spatial coordinates <br><br>  Each commune is represented by: $$x_i = (x_i^{lon}, x_i^{lat})$$  |  Standard objective: $$J = \sum_{k=1}^{K} \sum_{i \in C_k} \lVert x_i - \mu_k \rVert^2$$   <br>  -  $C_k$: cluster $k$ <br> - $\mu_k$: centroid of cluster $k$   |     
+|  **Activity-weighted clustering**    |  Introduces operational demand through weights  <br><br>  Each commune receives a weight: $$w_i = \text{activity\_level}_i$$  | Weighted objective: $$J = \sum_{k=1}^{K} \sum_{i \in C_k} w_i \, \lVert x_i - \mu_k \rVert^2$$  <br>  $$\mu_k = \frac{\sum_{i \in C_k} w_i x_i}{\sum_{i \in C_k} w_i}$$  |
+| **Activity + accessibility weighting**  |    Introduces travel difficulty between communes  <br><br> Weight:  $$w_i = \frac{\text{activity\_level}_i}{\text{minutes}_i + \varepsilon}$$     -  $\text{minutes}_i$: travel time from commune $i$  <br> - $\varepsilon$ avoids division by 0   |     $$J = \sum_{k=1}^{K} \sum_{i \in C_k} w_i \, \lVert x_i - \mu_k \rVert^2$$  |
+|     **Activity + average accessibility weighting**   |   Uses average accessibility per commune <br><br>   Average travel time:  $$\bar{t}_i = \frac{1}{\mid N_i \mid} \sum_{j \in N_i} t_{ij}$$   <br>   Weight:  $$w_i = \frac{\text{activity\_level}_i}{\bar{t}_i + \varepsilon}$$    |       $$J = \sum_{k=1}^{K} \sum_{i \in C_k} w_i \, \lVert x_i - \mu_k \rVert^2$$  |
+
+ 
+
+
+ 
+<br><br>
+
+
+
+<div style="display: flex; justify-content: space-between; gap: 15px;">
+    <img src="data/img/spatial_clustering.png" style="width: 100%;">
+</div>
+
+
+<div style="display: flex; justify-content: space-between; gap: 15px;">
+    <img src="data/img/activity_based_clustering.png" style="width: 100%;">
+</div>
+
+
+<div style="display: flex; justify-content: space-between; gap: 15px;">
+    <img src="data/img/activity_access_based_clustering.png" style="width: 100%;">
+</div>
+
+
+
+
+<div style="display: flex; justify-content: space-between; gap: 15px;">
+    <img src="data/img/activity_avg_access_based_clustering.png" style="width: 100%;">
+</div>
+
+
+
+
+
+<br>
+
+
+<div style="display: flex; justify-content: space-between; gap: 15px;">
+  <div style="width: 50%;">
+    <img src="data/img/plot_activity_level_count_by_clustering.png" style="width: 100%;">
+  </div>
+  <div style="width: 50%;">
+    <img src="data/img/plot_dist_to_centroid_by_clustering.png" style="width: 100%;">
+  </div>
+</div>
