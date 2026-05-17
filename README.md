@@ -62,8 +62,8 @@ We compare several clustering strategies to model how operational bases should b
 |-----|-----------|------|
 |  **Baseline geographic clustering**   |    Reference model using only spatial coordinates <br><br>  Each commune is represented by: $$x_i = (x_i^{lon}, x_i^{lat})$$  |  Standard objective: <br> $$J = \sum_{k=1}^{K} \sum_{i \in C_k} \lVert x_i - \mu_k \rVert^2$$   <br><br>  -  $C_k$: cluster $k$ <br> - $\mu_k$: centroid of cluster $k$   |     
 |  **Activity-weighted clustering**    |  Introduces operational demand through weights  <br><br>  Each commune receives a weight: <br> $$w_i = \text{activityLevel}_i$$  | Weighted objective: <br> $$J = \sum_{k=1}^{K} \sum_{i \in C_k} w_i \, \lVert x_i - \mu_k \rVert^2$$  <br><br>  $$\mu_k = \frac{\sum_{i \in C_k} w_i x_i}{\sum_{i \in C_k} w_i}$$  |
-| **Activity + accessibility weighting**  |    Introduces travel difficulty between communes  <br><br> Weight: <br>  $$w_i = \frac{\text{activityLevel}_i}{\text{minutes}_i + \varepsilon}$$    <br> -  $\text{minutes}_i$: travel time from commune $i$  <br> - $\varepsilon$ avoids division by 0   |     $$J = \sum_{k=1}^{K} \sum_{i \in C_k} w_i \, \lVert x_i - \mu_k \rVert^2$$  |
-|     **Activity + average accessibility weighting**   |   Uses average accessibility per commune <br><br>   Average travel time:  <br> $$\bar{t}_i = \frac{1}{\mid N_i \mid} \sum_{j \in N_i} t_{ij}$$   <br>   Weight:  <br> $$w_i = \frac{\text{activityLevel}_i}{\bar{t}_i + \varepsilon}$$    |       $$J = \sum_{k=1}^{K} \sum_{i \in C_k} w_i \, \lVert x_i - \mu_k \rVert^2$$  |
+| **Activity + accessibility weighting**  |    Introduces travel difficulty between communes  <br><br> Weight: <br>  $$w_i = \frac{\text{activityLevel}_i}{\text{minutes}_i + \varepsilon}$$    <br><br> -  $\text{minutes}_i$: travel time from commune $i$  <br> - $\varepsilon$ avoids division by 0   |     $$J = \sum_{k=1}^{K} \sum_{i \in C_k} w_i \, \lVert x_i - \mu_k \rVert^2$$  |
+|     **Activity + average accessibility weighting**   |   Uses average accessibility per commune <br><br>   Average travel time:  <br> $$\bar{t}_i = \frac{1}{\mid N_i \mid} \sum_{j \in N_i} t_{ij}$$   <br><br>   Weight:  <br> $$w_i = \frac{\text{activityLevel}_i}{\bar{t}_i + \varepsilon}$$    |       $$J = \sum_{k=1}^{K} \sum_{i \in C_k} w_i \, \lVert x_i - \mu_k \rVert^2$$  |
 
  
 
@@ -86,9 +86,6 @@ We compare several clustering strategies to model how operational bases should b
 <div style="display: flex; justify-content: space-between; gap: 15px;">
     <img src="data/img/activity_access_based_clustering.png" style="width: 100%;">
 </div>
-
-
-
 
 <div style="display: flex; justify-content: space-between; gap: 15px;">
     <img src="data/img/activity_avg_access_based_clustering.png" style="width: 100%;">
