@@ -71,6 +71,10 @@ We compare several clustering strategies to model how operational bases should b
  
 <br><br>
 
+* Activity-weighted clustering (best): best overall trade-off between demand alignment, spatial coherence, and operational efficiency, while keeping clusters stable and well balanced
+* Geographic clustering (strong baseline): very stable and efficient spatial structure, but ignores demand, limiting operational relevance
+* Per-trip accessibility + demand weighting (mixed): slightly improves targeting of accessible high-demand areas, but introduces fragmentation and mild efficiency loss
+* Average accessibility-adjusted demand weighting (worst): highly unstable clustering with strong imbalance in size, workload, and distance, leading to poor and inconsistent operational performance
 
 
 <div style="display: flex; justify-content: space-between; gap: 15px;">
